@@ -1,0 +1,9 @@
+{
+    "project_name": "Django Scafoold",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+    "project_short_description": "Django scaffold to speed my dev work",
+    "version": "0.1.0",
+    "need_celery": false,
+    "need_sentry": false,
+    "open_source_license": ["MIT license", "BSD license", "ISC license", "Apache Software License 2.0", "GNU General Public License v3", "Not open source"]
+  }
