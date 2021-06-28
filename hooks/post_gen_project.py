@@ -10,6 +10,6 @@ def remove_file(filepath):
 
 if __name__ == '__main__':
 
-    if '{{ cookiecutter.need_celery }}' != 'y':
+    if '{{ cookiecutter.need_celery }}':
         remove_file('config/worker.py')
         remove_file('Dockerfile.worker')
