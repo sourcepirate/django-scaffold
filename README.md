@@ -1,7 +1,7 @@
 # Django Scaffold
 
-Github repo: https://github.com/sourcepirate/django-scaffold
-Free software: BSD license
+* Github repo: https://github.com/sourcepirate/django-scaffold
+* Free software: BSD license
 
 
 ## Features
