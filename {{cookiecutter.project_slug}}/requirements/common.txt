@@ -11,7 +11,8 @@ whitenoise==5.2.0
 psycopg2-binary
 mysqlclient
 {%- if cookiecutter.need_celery %}
-celery==5.0.5
+Redis==4.3.4
+celery==5.2
 {%- endif %}
 {%- if cookiecutter.need_sentry %}
 sentry-sdk==0.19.5

@@ -10,5 +10,27 @@ services:
     environment:
       HOST: "0.0.0.0"
       PORT: 8000
-      DEV: 1
       ALLOWED_HOSTS: "*"
+  postgres:
+    image: postgres:12.0
+    ports:
+    - '5432:5432'
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: {{ cookiecutter.project_slug }}
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+    - 6379:6379
+{%- if cookiecutter.need_celery %}
+  celery:
+    build: 
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      ALLOWED_HOSTS: "*"
+      CELERY_BROKER_URL: redis://redis:6379
+{%- endif %}
