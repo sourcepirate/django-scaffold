@@ -1,14 +1,15 @@
-Django==3.2
+joblib==0.14.0
+Django==4.0.4
+requests==2.22.0
 pytz==2019.3
-django-filter==2.4.0
-djangorestframework==3.12.2
+django-filter==21.1
+djangorestframework==3.13.1
 Markdown==3.1
-drf-extensions==0.6.0
-django-allauth==0.44.0
-redis==3.5.3
-django-cors-headers==3.6.0
+django-cors-headers==3.5.0
 requests==2.22.0
 whitenoise==5.2.0
+psycopg2-binary
+mysqlclient
 {%- if cookiecutter.need_celery %}
 celery==5.0.5
 {%- endif %}
