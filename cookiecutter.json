@@ -3,5 +3,8 @@
     "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
     "project_short_description": "Django scaffold to speed my dev work",
     "version": "0.1.0",
-    "open_source_license": ["MIT license", "BSD license",  "Not open source"]
+    "open_source_license": ["MIT license", "BSD license",  "Not open source"],
+    "_copy_without_render": [
+      "deploy"
+  ]
   }
