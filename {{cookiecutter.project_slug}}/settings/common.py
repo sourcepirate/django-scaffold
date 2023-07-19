@@ -135,9 +135,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Getting all database params
 
 MYSQL_HOST = os.environ.get("MYSQL_HOST", "mysql")
-MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", "{{cookiecutter.database.password}}")
-MYSQL_USER = os.environ.get("MYSQL_USER", "{{cookiecutter.database.username}}")
-MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE", "{{cookiecutter.database.database}}")
+MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", "{{cookiecutter.project_slug}}pw")
+MYSQL_USER = os.environ.get("MYSQL_USER", "{{cookiecutter.project_slug}}")
+MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE", "{{cookiecutter.project_slug}}")
 MYSQL_PORT = int(os.environ.get("MYSQL_PORT", 3306))
 
 
@@ -248,8 +248,8 @@ RESET_VIEW_LINK = "http://localhost:3000/frontresetview/"
 VERIFY_SUCCESS_VIEW = "http://localhost:3000/emailsuccess"
 VERIFY_FAILURE_VIEW = "http://localhost:3000/emailfailure"
 
-SPACES_ACCESS_ID = os.environ.get("SPACES_ACCESS_ID", "{{cookiecutter.spaces.access_key}}")
-SPACES_SECRET_KEY = os.environ.get("SPACES_SECRET_KEY", "{{cookiecutter.spaces.secret_key}}")
+SPACES_ACCESS_ID = os.environ.get("SPACES_ACCESS_ID", "")
+SPACES_SECRET_KEY = os.environ.get("SPACES_SECRET_KEY", "")
 
 AWS_ACCESS_KEY_ID = SPACES_ACCESS_ID
 AWS_SECRET_ACCESS_KEY = SPACES_SECRET_KEY
