@@ -3,18 +3,5 @@
     "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
     "project_short_description": "Django scaffold to speed my dev work",
     "version": "0.1.0",
-    "open_source_license": ["MIT license", "BSD license",  "Not open source"],
-    "database": {
-      "username": "",
-      "password": "",
-      "database": ""
-    },
-    "spaces": {
-      "access_key": "",
-      "access_secret": ""
-    },
-    "social": {
-      "google": {"client_id": "", "client_secret": ""},
-      "facebook": { "client_id": "", "client_secret": ""}
-    }
+    "open_source_license": ["MIT license", "BSD license",  "Not open source"]
   }
