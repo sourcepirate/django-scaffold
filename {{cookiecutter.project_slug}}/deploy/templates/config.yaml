@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ include "deploy.configname" . }}
+data:
+  mysql_db: "{{ .Values.database.name  }}"
+  mysql_username: "{{ .Values.database.username }}"
+  mysql_password: "{{ .Values.database.password }}"
+  mysql_port: "{{ .Values.database.port }}"
+  mysql_host: "{{ .Values.database.host }}"
+  spaces_access_id: "{{ .Values.spaces.access_id }}"
+  spaces_access_key: "{{ .Values.spaces.access_key }}"
+  redis_connection_string: "{{ .Values.cache.redis_connection_string }}"
+  serving_version: "{{ .Values.ml.serving_version }}"
+  rdb_host: "{{ .Values.rdb.host }}"
+  rdb_port: "{{ .Values.rdb.port }}"

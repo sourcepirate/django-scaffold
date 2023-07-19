@@ -1,12 +1,16 @@
-FROM python:3.8
+FROM plasmashadow/pandalpine:latest
 WORKDIR /app
-ENV WORKER_COUNT=5
-ENV LOG_LEVEL=info
+RUN apt-get update \
+      && apt-get -y install python3-dev  gcc musl-dev default-mysql-client \
+      build-essential \
+      libffi-dev \
+      mariadb-dev
 COPY . /app
-
-RUN apt-get update && apt-get install -y build-essential python3-dev gcc musl-dev libpq-dev libffi-dev git \
-      && pip install flower \
-      && pip install -r requirements/deps.txt --use-feature=2020-resolver \
-      && chmod +x /app/celery.sh 
-
+COPY certs/ca-certificate.crt /etc/certs/
+RUN pip install -r requirements/prod.txt
+RUN pip install sqlalchemy flower
+RUN chmod +x /app/entrypoint.sh \
+      && chmod +x /app/celery.sh
+RUN useradd -ms /bin/sh appuser
+USER appuser
 CMD [ "/app/celery.sh" ]

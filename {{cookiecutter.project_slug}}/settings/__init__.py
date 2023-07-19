@@ -1,6 +1,10 @@
 import os
 
-from settings.common import *
+from .common import *
 
-if os.environ.get("DEV"):
-    from settings.development import *
+env = os.environ.get("environment")
+
+if env == "production":
+    from .prod import *
+else:
+    from .dev import *

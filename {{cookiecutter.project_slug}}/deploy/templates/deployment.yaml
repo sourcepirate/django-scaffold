@@ -1,0 +1,130 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "deploy.fullname" . }}
+  labels:
+    {{- include "deploy.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "deploy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "deploy.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "deploy.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      - name: db-ca-cert
+        secret:
+          secretName: db-ca-cert
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: environment
+            value: production
+          - name: MYSQL_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "deploy.configname" . }}
+                key: mysql_host
+          - name: MYSQL_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "deploy.configname" . }}
+                key: mysql_port
+          - name: MYSQL_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "deploy.configname" . }}
+                key: mysql_db
+          - name: MYSQL_USER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "deploy.configname" . }}
+                key: mysql_username
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "deploy.configname" . }}
+                key: mysql_password
+          - name: HOSTNAME_ALLOWED
+            value: "*"
+          - name: SPACES_ACCESS_ID
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "deploy.configname" . }}
+                key: spaces_access_id
+          - name: SPACES_SECRET_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "deploy.configname" . }}
+                key: spaces_access_key
+          - name: REDIS_CONNECTION_STRING
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "deploy.configname" . }}
+                key: redis_connection_string
+          - name: ML_SERVING_VERSION
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "deploy.configname" . }}
+                key: serving_version
+          - name: RDB_HOST
+            valueFrom:
+                configMapKeyRef:
+                  name: {{ include "deploy.configname" . }}
+                  key: rdb_host
+          - name: RDB_HOST
+            valueFrom:
+                configMapKeyRef:
+                  name: {{ include "deploy.configname" . }}
+                  key: rdb_port
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 25
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 25
+          volumeMounts:
+          - mountPath: "/etc/certs"
+            name: db-ca-cert
+            readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+

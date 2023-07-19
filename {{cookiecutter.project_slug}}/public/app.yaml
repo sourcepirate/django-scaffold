@@ -1,0 +1,298 @@
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "0.1.0"
+  title: IPredict API
+  description: " this server offers all api regrading ipredict machine learning platform"
+
+host: "ipredict.com"
+basePath: "/v1"
+
+tags:
+- name: users
+  description: "user related api"
+- name: ML
+  description: "ml project related workflow"
+
+schemes:
+- https
+- http
+
+definitions:
+  RegisterUser:
+    type: object
+    properties:
+      username:
+        type: string
+        description: User name for signing up user
+        example: "sourcepirate"
+      email:
+        type: string
+        description: email id of the signing up user
+        example: bye@good.com
+      password:
+        type: string
+        description: Account password for the registration
+        example: testthisok
+      confirm_password:
+        type: string
+        description: Ones more
+        example: testhisok
+  
+  LoginUser:
+    type: object
+    properties:
+      username:
+        type: string
+        description: Username of the logging in user
+        example: sourcepirate
+      password:
+        type: string
+        description: Password of the logging in user
+        example: something
+  
+  RegistrationSuccess:
+    type: object
+    properties:
+      registration:
+        type: boolean
+        description: registration state
+        example: true
+  
+  RegistrationError:
+    type: object
+    properties:
+      registration:
+        type: boolean
+        description: registration state
+        example: false
+      error: 
+        type: string
+        description: error assosiated with operation
+        example: Bad request
+  
+  LoginSuccess:
+    type: object
+    properties:
+      token:
+        type: string
+        description: session token
+        example: aB3232234ndsksd7sdsolsfsSDFS
+  
+  LoginError:
+    type: object
+    properties:
+      token:
+        type: string
+        description: session token
+        example: ""
+      message:
+        type: string
+        description: appears only if there is an error
+        example: Invalid request or Access Denied
+  
+  MlProjectCreatePayload:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the project
+        example: "First project"
+      description:
+        type: string
+        description: description of the project
+        example: "First description"
+  
+  MlProjectCreateSuccessResponse:
+    type: object
+    properties:
+      id:
+        type: number
+        description: "Id of the created project"
+  
+  MlProjectCreateErrorResponse:
+    type: object
+    properties:
+      detail:
+        type: string
+        description: Details of the error
+  
+  MlProjectList:
+    type: array
+    items:
+     $ref: "#/definitions/MlProjectCreatePayload"
+
+paths:
+  /register:
+    post:
+     tags:
+     - users
+     summary: "register"
+     description: "Offers registration api for new user signup based on username, password and email"
+     consumes:
+     - application/json
+     produces:
+     - application/json
+     parameters:
+     - in: body
+       name: body
+       description: " Post the user related values "
+       required: true
+       schema:
+        $ref: "#/definitions/RegisterUser"
+     responses:
+      200:
+        description: Successfull registration
+        schema:
+         $ref: "#/definitions/RegistrationSuccess"
+      
+      400:
+       description: Successfull registration
+       schema:
+         $ref: "#/definitions/RegistrationError"
+      
+      500:
+       description: Successfull registration
+       schema:
+         $ref: "#/definitions/RegistrationError"
+  
+  /login:
+    post:
+      tags:
+      - users
+      summary: login
+      description: Retrives the token information 
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Login a user
+        required: true
+        schema:
+         $ref: "#/definitions/LoginUser"
+      responses:
+        200:
+          description: On Login Success
+          schema:
+            $ref: "#/definitions/LoginSuccess"
+        401:
+          description: On Login Access denied
+          schema:
+            $ref: "#/definitions/LoginError"
+        500:
+          description: On Login Access failure
+          schema:
+            $ref: "#/definitions/LoginError"
+  
+  /ml/projects:
+    post:
+     tags:
+     - ML
+     summary: "ml project create"
+     description: "ml project api creation and workflow"
+     consumes:
+     - application/json
+     produces:
+     - application/json
+     parameters:
+     - in: body
+       name: body
+       description: "Post these params to create a new ml project"
+       required: true
+       schema:
+        $ref: "#/definitions/MlProjectCreatePayload"
+     responses:
+      201:
+        description: Successfully Created
+        schema:
+         $ref: "#/definitions/MlProjectCreateSuccessResponse"
+      
+      401:
+        description: Unauthorized 
+        schema:
+         $ref: "#/definitions/MlProjectCreateErrorResponse"
+  
+    get:
+     tags:
+     - ML
+     summary: ml project list
+     description: describe ml projects
+     consumes:
+     - application/json
+     produces:
+     - application/json
+     responses:
+      200:
+        description: List of projects
+        schema:
+         $ref: "#/definitions/MlProjectList"
+      401:
+        description: Unauthorized
+        schema:
+         $ref: "#/definitions/MlProjectCreateErrorResponse"
+
+  /ml/projects/<:id>:
+    get:
+     tags:
+     - ML
+     summary: "get ml project"
+     description: "get info of ml project"
+     consumes:
+      - application/json
+     produces:
+      - application/json
+     parameters:
+      - in: body
+        name: body
+        description: "put these params to create a new ml project"
+        required: true
+        schema:
+          $ref: "#/definitions/MlProjectCreatePayload"
+      - in: path
+        name: id
+        required: true
+        type: integer
+        description: ID of the project
+     responses:
+      200:
+        description: List of projects
+        schema:
+          $ref: "#/definitions/MlProjectCreatePayload"
+      401:
+        description: Unauthorized
+        schema:
+          $ref: "#/definitions/MlProjectCreateErrorResponse"
+    
+    delete:
+     tags:
+     - ML
+     summary: "get ml project"
+     description: "get info of ml project"
+     consumes:
+      - application/json
+     produces:
+      - application/json
+     parameters:
+      - in: body
+        name: body
+        description: "put these params to create a new ml project"
+        required: true
+        schema:
+          $ref: "#/definitions/MlProjectCreatePayload"
+      - in: path
+        name: id
+        required: true
+        type: integer
+        minimum: 1
+        description: ID of the project
+     responses:
+      204:
+        description: No content success
+      401:
+        description: Unauthorized
+        schema:
+          $ref: "#/definitions/MlProjectCreateErrorResponse"

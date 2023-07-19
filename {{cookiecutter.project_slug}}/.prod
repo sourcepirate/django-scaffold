@@ -1,0 +1,8 @@
+export DB_PORT=25060
+export DB_HOST=private-{{cookiecutter.project_slug}}-do-user-6521869-0.b.db.ondigitalocean.com
+export DB_USERNAME=doadmin
+export DB_PASSWORD=AVNS_kls-ygd-zScQq6ZPVyd
+export REDIS_CONNECTION_STRING=rediss://default:AVNS_u_3AN7Dcb3cHsPyPcLm@kalkyai-redis-do-user-6521869-0.b.db.ondigitalocean.com:25061
+export SPACES_ACCESS_ID=DO00UKVU2DWPQRBWMGKJ
+export SPACES_ACCESS_KEY=lZsnYEp/oyNoq+HVOAo8Nhy9ntwYKYb5tdrtzm894Zc
+

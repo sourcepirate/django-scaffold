@@ -1,19 +1,24 @@
-joblib==0.14.0
-Django==4.0.4
-requests==2.22.0
+Django==4.2.2
 pytz==2019.3
-django-filter==21.1
-djangorestframework==3.13.1
+django-filter==23.2
+djangorestframework==3.14.0
 Markdown==3.1
-django-cors-headers==3.5.0
-requests==2.22.0
-whitenoise==5.2.0
+django-cors-headers==4.2.0
+django-rest-swagger==2.2.0
+django-guardian==2.4.0
+django-redis==5.2.0
+joblib==1.2.0
+django-prometheus==2.3.1
+drf-extensions==0.7.1
+boto3==1.24.46
+botocore==1.27.88
+redis==4.4.2
+django-storages==1.13.2
+kubernetes==25.3.0
+rethinkdb==2.4.9
+newrelic==8.5.0
+requests==2.28.2
+sentry-sdk==1.14.0
+beautifulsoup4==4.11.1
 psycopg2-binary
 mysqlclient
-{%- if cookiecutter.need_celery %}
-Redis==4.3.4
-celery==5.2
-{%- endif %}
-{%- if cookiecutter.need_sentry %}
-sentry-sdk==0.19.5
-{%- endif %}

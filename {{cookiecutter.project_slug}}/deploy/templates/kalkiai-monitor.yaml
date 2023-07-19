@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{cookiecutter.project_slug}}-backend-monitor
+  labels:
+    {{- include "deploy.appLabels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+    {{- include "deploy.appLabels" . | nindent 6 }}
+  jobLabel: django
+  endpoints:
+  - port: {{cookiecutter.project_slug}}port
+    interval: 5s
+  namespaceSelector:
+    matchNames:
+    - backend

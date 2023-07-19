@@ -1,0 +1,92 @@
+image: python:3.8
+
+services:
+  - docker:dind
+
+
+.before_script_template:
+  before_script:
+  - apt-get update
+  - apt-get -y install default-mysql-client build-essential libffi-dev
+
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+lint:
+ stage: lint
+ image: plasmashadow/pandalpine:latest
+ extends: .before_script_template
+ script:
+   - pip3 install -r requirements/test.txt
+   - black --check --line-length=79 {{cookiecutter.project_slug}}/**/*.py
+
+test:
+  extends: .before_script_template
+  stage: test
+  image: python:3.8
+  variables:
+    MYSQL_DATABASE: ipredict
+    RABBITMQ_DEFAULT_USER: ipredict
+    RABBITMQ_DEFAULT_PASS: ipredict
+  services:
+    - name: rabbitmq:3-management
+      alias: rabbitmq
+  script:
+    - mkdir -p /app/media
+    - pip3 install -r requirements/prod.txt
+    - pip3 install -r requirements/test.txt
+    - export DJANGO_SETTINGS_MODULE='settings.ci'
+    - python3 manage.py createcachetable
+    - python3 manage.py test --failfast --verbosity 3
+
+test_migrations:
+  extends: .before_script_template
+  image: python:3.8
+  stage: test
+  script:
+    - pip3 install -r requirements/prod.txt
+    - pip3 install -r requirements/test.txt
+    - python3 manage.py makemigrations --check --dry-run --settings settings.ci > /dev/null || echo "Migration failure!!!"
+
+
+build:
+  stage: build
+  image: docker:latest
+  script:
+    - apk update && apk add git
+    - docker login registry.digitalocean.com --username $TOKEN --password $TOKEN
+    - docker build -t registry.digitalocean.com/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}:${CI_COMMIT_SHORT_SHA} $PWD
+    - docker push registry.digitalocean.com/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}:${CI_COMMIT_SHORT_SHA}
+    - docker tag registry.digitalocean.com/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}:${CI_COMMIT_SHORT_SHA} registry.digitalocean.com/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}:latest
+    - docker push registry.digitalocean.com/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}:latest
+  only:
+    - master
+  tags:
+    - docker
+
+collectstatic:
+  extends: .before_script_template
+  image: python:3.8
+  stage: build
+  when: manual
+  script:
+    - pip3 install -r requirements/prod.txt
+    - pip3 install -r requirements/test.txt
+    - python3 manage.py collectstatic --no-input
+  only:
+    - master
+
+
+deploy:
+  stage: deploy
+  when: manual
+  image: 
+   name: digitalocean/doctl:latest
+   entrypoint: [""] 
+  script:
+  - ./ci/deploy.sh
+  only:
+  - master
