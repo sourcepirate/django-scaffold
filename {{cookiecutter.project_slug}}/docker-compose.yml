@@ -31,8 +31,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rooter
       MYSQL_DATABASE: {{ cookiecutter.project_slug }}
-      MYSQL_USER: root
-      MYSQL_PASSWORD: rooter
     volumes:
     - './data:/var/lib/mysql'
     networks:
