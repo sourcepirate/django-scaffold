@@ -138,7 +138,7 @@ POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "postgres")
 POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD", "{{cookiecutter.project_slug}}pw")
 POSTGRES_USER = os.environ.get("POSTGRES_USER", "{{cookiecutter.project_slug}}")
 POSTGRES_DATABASE = os.environ.get("POSTGRES_DATABASE", "{{cookiecutter.project_slug}}")
-POSTGRES_PORT = int(os.environ.get("POSTGRES_PORT", 3306))
+POSTGRES_PORT = int(os.environ.get("POSTGRES_PORT", 5432))
 
 
 # Database
