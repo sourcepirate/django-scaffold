@@ -5,6 +5,10 @@
 
 
 ## Features
-* Testing setup with unittest and django test
-* github actions
-* celery templates inbuilt.
+* Django 4.2 Support
+* Celery 5.2 Support
+* Support CI / CD config with gitlab and digitalocean.
+* Support newrelic logs and tracing.
+
+## License
+* Free software: BSD license
