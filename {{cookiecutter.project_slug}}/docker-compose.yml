@@ -5,7 +5,7 @@ services:
     build: .
     entrypoint: /bin/sh -c "python manage.py makemigrations && python manage.py createcachetable && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     environment:
-      MYSQL_DATABASE: ipredict
+      MYSQL_DATABASE: {{ cookiecutter.project_slug }}
       MYSQL_USER: root
       MYSQL_PASSWORD: rooter
       MYSQL_HOST: mysql
@@ -30,9 +30,9 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: rooter
-      MYSQL_DATABASE: ipredict
-      MYSQL_USER: ipredict
-      MYSQL_PASSWORD: ipredict
+      MYSQL_DATABASE: {{ cookiecutter.project_slug }}
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rooter
     volumes:
     - './data:/var/lib/mysql'
     networks:
@@ -41,7 +41,7 @@ services:
     build: .
     entrypoint: /bin/sh -c "celery -A {{cookiecutter.project_slug}}.celery_app worker --loglevel=INFO --concurrency=8 -O fair -P prefork -n cel_app_worker"
     environment:
-      MYSQL_DATABASE: ipredict
+      MYSQL_DATABASE: {{ cookiecutter.project_slug }}
       MYSQL_USER: root
       MYSQL_PASSWORD: rooter
       MYSQL_HOST: mysql
@@ -80,21 +80,6 @@ services:
     - redis
     - worker
     - mysql
-    - frontend
-    - rethinkdb
-  frontend:
-    build: ../{{cookiecutter.project_slug}}-ui
-    volumes:
-      - '../{{cookiecutter.project_slug}}-ui/build:/usr/share/nginx/html'
-    links:
-      - mysql:mysql
-      - redis:redis
-      - django:django
-    networks:
-    - tuxnet
-    depends_on:
-    - mysql
-    - redis
     - rethinkdb
   rethinkdb:
     image: rethinkdb:2.4.2
