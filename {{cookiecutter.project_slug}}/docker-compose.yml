@@ -5,10 +5,10 @@ services:
     build: .
     entrypoint: /bin/sh -c "python manage.py makemigrations && python manage.py createcachetable && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     environment:
-      MYSQL_DATABASE: {{ cookiecutter.project_slug }}
-      MYSQL_USER: root
-      MYSQL_PASSWORD: rooter
-      MYSQL_HOST: mysql
+      POSTGRES_DATABASE: {{ cookiecutter.project_slug }}
+      POSTGRES_USER: {{cookiecutter.project_slug}}
+      POSTGRES_PASSWORD: {{cookiecutter.project_slug}}pw
+      POSTGRES_HOST: postgres
       HOSTNAME_ALLOWED: "*"
       SPACES_ACCESS_ID: DO00UKVU2DWPQRBWMGKJ
       SPACES_SECRET_KEY: lZsnYEp/oyNoq+HVOAo8Nhy9ntwYKYb5tdrtzm894Zc
@@ -18,45 +18,48 @@ services:
     volumes:
       - './:/app:rw'
     links:
-    - mysql:mysql
+    - postgres:postgres
     - redis:redis
     networks:
     - tuxnet
     depends_on:
-    - mysql
+    - postgres
     - redis
     - rethinkdb
-  mysql:
-    image: mysql:8.0
+  postgres:
+    image: postgres:14.1-alpine
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rooter
-      MYSQL_DATABASE: {{ cookiecutter.project_slug }}
-    volumes:
-    - './data:/var/lib/mysql'
+      - POSTGRES_USER={{cookiecutter.project_slug}}
+      - POSTGRES_PASSWORD={{cookiecutter.project_slug}}pw
+    ports:
+      - '5432:5432'
+    volumes: 
+      - ./data:/var/lib/postgresql/data
     networks:
     - tuxnet
   worker:
     build: .
     entrypoint: /bin/sh -c "celery -A {{cookiecutter.project_slug}}.celery_app worker --loglevel=INFO --concurrency=8 -O fair -P prefork -n cel_app_worker"
     environment:
-      MYSQL_DATABASE: {{ cookiecutter.project_slug }}
-      MYSQL_USER: root
-      MYSQL_PASSWORD: rooter
-      MYSQL_HOST: mysql
+      POSTGRES_DATABASE: {{ cookiecutter.project_slug }}
+      POSTGRES_USER: {{cookiecutter.project_slug}}
+      POSTGRES_PASSWORD: {{cookiecutter.project_slug}}pw
+      POSTGRES_HOST: postgres
       SPACES_ACCESS_ID: DO00UKVU2DWPQRBWMGKJ
       SPACES_SECRET_KEY: lZsnYEp/oyNoq+HVOAo8Nhy9ntwYKYb5tdrtzm894Zc
       REDIS_CONNECTION_STRING: redis://redis:6379
     volumes:
       - './:/app:rw'
     links:
-      - mysql:mysql
+      - postgres:postgres
       - redis:redis
     ports:
       - 5555:5555
     networks:
     - tuxnet
     depends_on:
-    - mysql
+    - postgres
     - redis
     - rethinkdb
   redis:
@@ -77,7 +80,7 @@ services:
     - django
     - redis
     - worker
-    - mysql
+    - postgres
     - rethinkdb
   rethinkdb:
     image: rethinkdb:2.4.2

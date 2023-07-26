@@ -7,7 +7,7 @@ services:
 .before_script_template:
   before_script:
   - apt-get update
-  - apt-get -y install default-mysql-client build-essential libffi-dev
+  - apt-get -y install default-postgres-client build-essential libffi-dev
 
 stages:
   - lint
@@ -28,7 +28,7 @@ test:
   stage: test
   image: python:3.8
   variables:
-    MYSQL_DATABASE: ipredict
+    POSTGRES_DATABASE: ipredict
     RABBITMQ_DEFAULT_USER: ipredict
     RABBITMQ_DEFAULT_PASS: ipredict
   services:

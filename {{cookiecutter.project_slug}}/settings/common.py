@@ -134,11 +134,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Getting all database params
 
-MYSQL_HOST = os.environ.get("MYSQL_HOST", "mysql")
-MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", "{{cookiecutter.project_slug}}pw")
-MYSQL_USER = os.environ.get("MYSQL_USER", "{{cookiecutter.project_slug}}")
-MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE", "{{cookiecutter.project_slug}}")
-MYSQL_PORT = int(os.environ.get("MYSQL_PORT", 3306))
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "postgres")
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD", "{{cookiecutter.project_slug}}pw")
+POSTGRES_USER = os.environ.get("POSTGRES_USER", "{{cookiecutter.project_slug}}")
+POSTGRES_DATABASE = os.environ.get("POSTGRES_DATABASE", "{{cookiecutter.project_slug}}")
+POSTGRES_PORT = int(os.environ.get("POSTGRES_PORT", 3306))
 
 
 # Database
@@ -146,12 +146,12 @@ MYSQL_PORT = int(os.environ.get("MYSQL_PORT", 3306))
 
 DATABASES = {
     "default": {
-        "ENGINE": "django_prometheus.db.backends.mysql",  # For monitoring queries.
-        "NAME": MYSQL_DATABASE,
-        "USER": MYSQL_USER,
-        "PASSWORD": MYSQL_PASSWORD,
-        "HOST": MYSQL_HOST,
-        "PORT": MYSQL_PORT,
+        "ENGINE": "django_prometheus.db.backends.postgresql",  # For monitoring queries.
+        "NAME": POSTGRES_DATABASE,
+        "USER": POSTGRES_USER,
+        "PASSWORD": POSTGRES_PASSWORD,
+        "HOST": POSTGRES_HOST,
+        "PORT": POSTGRES_PORT,
     }
 }
 

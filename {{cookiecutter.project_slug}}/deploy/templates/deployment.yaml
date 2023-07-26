@@ -36,31 +36,31 @@ spec:
           env:
           - name: environment
             value: production
-          - name: MYSQL_HOST
+          - name: POSTGRES_HOST
             valueFrom:
               configMapKeyRef:
                 name: {{ include "deploy.configname" . }}
-                key: mysql_host
-          - name: MYSQL_PORT
+                key: postgres_host
+          - name: POSTGRES_PORT
             valueFrom:
               configMapKeyRef:
                 name: {{ include "deploy.configname" . }}
-                key: mysql_port
-          - name: MYSQL_DATABASE
+                key: postgres_port
+          - name: POSTGRES_DATABASE
             valueFrom:
               configMapKeyRef:
                 name: {{ include "deploy.configname" . }}
-                key: mysql_db
-          - name: MYSQL_USER
+                key: postgres_db
+          - name: POSTGRES_USER
             valueFrom:
               configMapKeyRef:
                 name: {{ include "deploy.configname" . }}
-                key: mysql_username
-          - name: MYSQL_PASSWORD
+                key: postgres_username
+          - name: POSTGRES_PASSWORD
             valueFrom:
               configMapKeyRef:
                 name: {{ include "deploy.configname" . }}
-                key: mysql_password
+                key: postgres_password
           - name: HOSTNAME_ALLOWED
             value: "*"
           - name: SPACES_ACCESS_ID

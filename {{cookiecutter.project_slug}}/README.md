@@ -22,7 +22,7 @@ worker -> Dockerfile.worker
 
 ```
 
-# Mounting the mysql volume
+# Mounting the postgres volume
 mkdir data
 
 ```
