@@ -1,4 +1,4 @@
-FROM plasmashadow/pandalpine:latest
+FROM python:3.10.8-slim-bullseye
 WORKDIR /app
 RUN apt-get update \
       && apt-get -y install python3-dev  gcc musl-dev default-mysql-client \

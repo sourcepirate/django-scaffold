@@ -1,4 +1,4 @@
-FROM python:3.8-buster
+FROM python:3.10.8-slim-bullseye
 WORKDIR /app
 RUN apt-get update \
       && apt-get -y install apt-utils default-mysql-client build-essential \
